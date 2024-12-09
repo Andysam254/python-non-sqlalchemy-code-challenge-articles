@@ -11,7 +11,9 @@ class Author:
 
     @name.setter
     def name(self, value):
-        raise AttributeError("Author name is immutable and cannot be changed")
+        if not isinstance(value, str) or len(value.strip()) == 0:
+            raise ValueError("Invalid name")
+        self._name = value
 
     def articles(self):
         return self._articles
@@ -49,9 +51,21 @@ class Magazine:
     def name(self):
         return self._name
 
+    @name.setter
+    def name(self, value):
+        if not isinstance(value, str) or not (2 <= len(value) <= 16):
+            raise ValueError("Magazine name must be between 2 and 16 characters")
+        self._name = value
+
     @property
     def category(self):
         return self._category
+
+    @category.setter
+    def category(self, value):
+        if not isinstance(value, str) or len(value.strip()) == 0:
+            raise ValueError("Category must be a valid non-empty string")
+        self._category = value
 
     def articles(self):
         return self._articles
@@ -98,8 +112,10 @@ class Article:
         return self._title
 
     @title.setter
-    def title(self, _):
-        raise AttributeError("Article title is immutable and cannot be changed")
+    def title(self, value):
+        if not isinstance(value, str) or not (5 <= len(value) <= 50):
+            raise ValueError("Title must be a string between 5 and 50 characters")
+        self._title = value
 
     @property
     def author(self):
@@ -124,4 +140,3 @@ class Article:
         self._magazine._articles.remove(self)
         new_magazine._articles.append(self)
         self._magazine = new_magazine
-
